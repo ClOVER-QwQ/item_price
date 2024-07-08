@@ -42,11 +42,5 @@ public class Group {
         items.remove(item);
     }
 
-    public double getTotalPrice() {
-        double totalPrice = 0;
-        for (Item item : items) {
-            totalPrice += item.getPrice();
-        }
-        return totalPrice;
-    }
 }
+

@@ -1,11 +1,16 @@
 package com.example.item_price;
 
-import android.annotation.SuppressLint;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,53 +19,44 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.core.content.ContextCompat;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import static com.example.item_price.R.*;
 
 public class AddFrame extends Activity {
 
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
     private LinearLayout mainLayout;
     private ArrayList<Item> itemsList;
-    private int counter;
+    private int counter = 1;
     private EditText groupNameInput;
-    private BufferedWriter currentWriter; // 用于跟踪当前正在写入的 BufferedWriter
+    private BufferedWriter currentWriter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add);
+        setContentView(layout.add);
 
-        mainLayout = findViewById(R.id.mainLayout);
+        mainLayout = findViewById(id.mainLayout);
         itemsList = new ArrayList<>();
         counter = 1;
-        groupNameInput = findViewById(R.id.groupNameInput);
+        groupNameInput = findViewById(id.groupNameInput);
 
-        Button addButton = findViewById(R.id.additembtn);
+        Button addButton = findViewById(id.additembtn);
         addButton.setOnClickListener(v -> {
             Log.d("Input", "Add button Clicked");
-            addNewItemGroup();
+            addNewItem();
         });
 
-        Button saveButton = findViewById(R.id.savebtn);
+        Button saveButton = findViewById(id.savebtn);
         saveButton.setOnClickListener(v -> {
             Log.d("Input", "Save button Clicked");
-            saveItems();
+            requestStoragePermission();
         });
 
-        Button backButton = findViewById(R.id.back);
+        Button backButton = findViewById(id.back);
         backButton.setOnClickListener(v -> {
             Log.d("Input", "Back button Clicked");
             finish();
         });
-
-        requestStoragePermission();
     }
 
     private void requestStoragePermission() {
@@ -71,117 +67,118 @@ public class AddFrame extends Activity {
                 requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
             }
+        } else {
+            saveItemGroup();
         }
     }
 
-    private void addNewItemGroup() {
+    private int getNextFileId() {
+        int fileId;
+        SharedPreferences prefs = getSharedPreferences("file_counter_prefs", MODE_PRIVATE);
+        fileId = prefs.getInt("file_counter", 0);
+        fileId++;
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("file_counter", fileId);
+        editor.apply();
+        return fileId;
+    }
+
+    private void addNewItem() {
         String groupName = groupNameInput.getText().toString().trim();
         if (groupName.isEmpty()) {
             Toast.makeText(this, "请输入物品组名称", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        View itemGroupView = getLayoutInflater().inflate(R.layout.item, mainLayout, false);
+        View itemView = getLayoutInflater().inflate(layout.item, mainLayout, false);
 
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) EditText groupNameTextView = itemGroupView.findViewById(R.id.group_name_text);
-        if (groupNameTextView!= null) {
-            groupNameTextView.setText(groupName);
-        }
+        LinearLayout itemLayout = itemView.findViewById(id.item);
+        EditText itemNameEditText = (EditText) itemLayout.findViewById(R.id.itemName);
+        EditText itemPriceEditText = (EditText) itemLayout.findViewById(R.id.itemPrice);
 
-        mainLayout.addView(itemGroupView);
-        ((LinearLayout.LayoutParams) itemGroupView.getLayoutParams()).topMargin = 10;
+        itemNameEditText.setId(counter * 2 - 1);
+        itemPriceEditText.setId(counter * 2);
+
+        mainLayout.addView(itemView);
+        ((LinearLayout.LayoutParams) itemView.getLayoutParams()).topMargin = 10 * counter;
+
+        Item newItem = new Item();
+        newItem.setId(counter);
+        itemsList.add(newItem);
         counter++;
     }
 
-    private void saveItems() {
-        itemsList.clear();
-
-        for (int i = 1; i <= counter; i++) {
-            EditText itemNameInput = findViewById(getItemId(R.id.itemName, i));
-            EditText itemPriceInput = findViewById(getItemId(R.id.itemPrice, i));
-
-            if (itemNameInput!= null && itemPriceInput!= null) {
-                String itemName = itemNameInput.getText().toString();
-                double itemPrice;
-                try {
-                    itemPrice = Double.parseDouble(itemPriceInput.getText().toString());
-                } catch (NumberFormatException e) {
-                    Toast.makeText(this, "价格输入错误", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                Item newItem = new Item();
-                newItem.setId(i);
-                newItem.setName(itemName);
-                newItem.setPrice(itemPrice);
-                itemsList.add(newItem);
-            }
-        }
-
-        saveItemsToFile();
-
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("saved", true);
-        setResult(RESULT_OK, resultIntent);
-        finish();
-    }
-
-    private void saveItemsToFile() {
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            HashMap<String, ArrayList<Item>> groupItemsMap = new HashMap<>();
-
-            for (Item item : itemsList) {
-                String groupId = "group" + item.getId();
-                if (!groupItemsMap.containsKey(groupId)) {
-                    groupItemsMap.put(groupId, new ArrayList<>());
-                }
-                Objects.requireNonNull(groupItemsMap.get(groupId)).add(item);
-            }
-
-            File externalDir = getExternalFilesDir(null);
-            if (externalDir!= null && externalDir.exists() && externalDir.isDirectory()) {
-                for (Map.Entry<String, ArrayList<Item>> entry : groupItemsMap.entrySet()) {
-                    String fileName = entry.getKey() + "_" + System.currentTimeMillis() + ".txt";
-                    File file = new File(externalDir, fileName);
-                    try {
-                        if (!file.createNewFile()) {
-                            Toast.makeText(this, "无法创建新文件: " + fileName, Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        currentWriter = new BufferedWriter(new FileWriter(file)); // 初始化并跟踪当前的 BufferedWriter
-
-                        for (Item item : entry.getValue()) {
-                            currentWriter.write(item.getName() + " - " + item.getPrice() + "\n");
-                        }
-
-                        currentWriter.close(); // 关闭 BufferedWriter
-                        currentWriter = null; // 置空，以便后续判断是否已关闭
-                    } catch (IOException e) {
-                        Toast.makeText(this, "保存文件时出错: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        Log.e("FileSaveError", "Error saving file: " + e.getMessage());
-                    }
-                }
-            } else {
-                Toast.makeText(this, "外部存储目录不可用或不是目录", Toast.LENGTH_SHORT).show();
-            }
+    private void saveItemGroup() {
+        if (!itemsList.isEmpty()) {
+            int fileId = getNextFileId();
+            saveItemsToFile(fileId);
+            saveGroupIdAndName(fileId);
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("saved", true);
+            setResult(RESULT_OK, resultIntent);
+            finish();
         } else {
-            Toast.makeText(this, "外部存储不可写，无法保存文件", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "没有物品可保存，请先添加物品", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private int getItemId(int baseId, int index) {
-        return baseId + index;
+    private void saveItemsToFile(int fileId) {
+        try {
+            File file = new File(getExternalFilesDir(null), "items_" + fileId + ".txt");
+            if (currentWriter == null) {
+                currentWriter = new BufferedWriter(new FileWriter(file));
+            }
+            for (Item item : itemsList) {
+                EditText itemNameEditText = (EditText) mainLayout.findViewById(item.getId() * 2 - 1);
+                EditText itemPriceEditText = (EditText) mainLayout.findViewById(item.getId() * 2);
+
+                String itemName = itemNameEditText.getText().toString().trim();
+                String itemPrice = itemPriceEditText.getText().toString().trim();
+
+                item.setName(itemName);
+                item.setPrice(itemPrice);
+
+                currentWriter.write(item.getId() + "," + item.getName() + "," + item.getPrice() + "\n");
+            }
+            currentWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("SaveItemsToFile", "Failed to save items to file.", e);
+        }
+    }
+
+    private void saveGroupIdAndName(int fileId) {
+        try {
+            File groupsFile = new File(getExternalFilesDir(null), "groups.txt");
+            BufferedWriter groupsWriter = new BufferedWriter(new FileWriter(groupsFile, true));
+            groupsWriter.write(fileId + "," + groupNameInput.getText().toString() + "\n");
+            groupsWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("SaveGroupIdAndName", "Failed to save group id and name.", e);
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Log.d("ResourceRelease", "Releasing resources in onDestroy");
-        if (currentWriter!= null) { // 如果在销毁时仍有未关闭的 BufferedWriter，进行关闭
+        if (currentWriter!= null) {
             try {
                 currentWriter.close();
             } catch (IOException e) {
                 Log.e("ResourceRelease", "Error closing BufferedWriter in onDestroy: " + e.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                saveItemGroup();
+            } else {
+                Toast.makeText(this, "无法保存数据，因为存储权限被拒绝", Toast.LENGTH_SHORT).show();
             }
         }
     }

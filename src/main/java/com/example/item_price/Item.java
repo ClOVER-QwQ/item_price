@@ -3,8 +3,8 @@ package com.example.item_price;
 public class Item {
     private int id;
     private String name;
-    private double rice;
-    private int num;
+    private String rice;
+    private int num=0;
     public int getNum() {
         return num;
     }
@@ -29,11 +29,11 @@ public class Item {
         this.name = name;
     }
 
-    public double getPrice() {
+    public String getPrice() {
         return rice;
     }
 
-    public void setPrice(double rice) {
+    public void setPrice(String rice) {
         this.rice = rice;
     }
 }

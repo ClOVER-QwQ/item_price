@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <TextView
+            android:id="@+id/group_name_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:padding="16dp"
+            android:layout_marginTop="16dp" />
+
+    <TextView
+            android:id="@+id/compensation_points_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:padding="16dp"
+            android:layout_below="@id/group_name_text_view"
+            android:layout_marginTop="16dp" />
+
+    <ScrollView
+            android:id="@+id/item_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/compensation_points_text_view"
+            android:layout_marginTop="16dp">
+
+        <LinearLayout
+                android:id="@+id/item_info_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+    </ScrollView>
+
+    <TextView
+            android:id="@+id/total_price_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="总价:"
+            android:layout_below="@id/item_scroll_view"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp" />
+
+    <TextView
+            android:id="@+id/total_price_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/total_price_label"
+            android:layout_alignBaseline="@id/total_price_label"
+            android:layout_marginStart="8dp" />
+
+    <LinearLayout
+            android:id="@+id/button_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+        <Button
+                android:id="@+id/back_button"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="返回" />
+
+        <Button
+                android:id="@+id/calculate_button"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="计算" />
+    </LinearLayout>
+</RelativeLayout>
