@@ -7,9 +7,9 @@
             android:allowBackup="true"
             android:dataExtractionRules="@xml/data_extraction_rules"
             android:fullBackupContent="@xml/backup_rules"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@mipmap/itemprice"
             android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_round"
+            android:roundIcon="@mipmap/itempriceround"
             android:supportsRtl="true"
             android:theme="@style/Theme.Item_price"
             tools:targetApi="31">
@@ -32,6 +32,8 @@
         <activity android:name=".CalculateFrame"
                 ></activity>
         <activity android:name=".ModifyFrame"
+                ></activity>
+        <activity android:name=".DoingFrame"
                 ></activity>
     </application>
 

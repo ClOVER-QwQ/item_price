@@ -19,23 +19,29 @@ import java.util.List;
 public class CalculateFrame extends AppCompatActivity {
 
     private int groupId;
+    private String groupName;
     private TextView totalPriceTextView;
     private List<Item> items;  // 用于存储读取到的物品列表
+    private TextView groupNameTextView;  // 新增：用于显示物品组名
+    private EditText compensationValueEditText;  // 新增：用于输入补偿价值
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calculate_frame);
-
-        Log.d("CalculateFrame", "onCreate started");
-
+        groupNameTextView = findViewById(R.id.group_name_text_view);  // 找到组名显示的 TextView
         Intent intent = getIntent();
         if (intent!= null) {
             groupId = intent.getIntExtra("groupId", -1);
+            groupName = intent.getStringExtra("groupName");  // 新增：获取物品组名称
             Log.d("CalculateFrame", "Received groupId: " + groupId);
+            Log.d("CalculateFrame", "Received groupName: " + groupName);  // 打印获取到的组名
+            groupNameTextView.setText(groupName);  // 设置组名到 TextView 中显示
         }
 
         totalPriceTextView = findViewById(R.id.total_price_text_view);
+        compensationValueEditText = findViewById(R.id.compensation_value_edit_text);  // 找到补偿价值输入的 EditText
+
         Button calculateButton = findViewById(R.id.calculate_button);
         Button backButton = findViewById(R.id.back_button);
 
@@ -101,7 +107,7 @@ public class CalculateFrame extends AppCompatActivity {
             quantityEditText.setText(String.valueOf(item.getNum()));  // 设置初始数量值
             Log.d("CalculateFrame", "Set quantity: " + item.getNum());  // 新增：打印设置的物品数量
 
-            if (itemLayout != null) {
+            if (itemLayout!= null) {
                 itemLayout.addView(itemView);
             }
         }
@@ -138,6 +144,18 @@ public class CalculateFrame extends AppCompatActivity {
                 }
             }
         }
-        totalPriceTextView.setText("总价: " + totalPrice);
+
+        // 获取补偿价值
+        String compensationValueText = compensationValueEditText.getText().toString();
+        double compensationValue = 0;
+        try {
+            compensationValue = Double.parseDouble(compensationValueText);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "补偿价值输入格式不正确，已使用默认值 0", Toast.LENGTH_SHORT).show();
+        }
+
+        // 计算最终总价
+        double finalTotalPrice = totalPrice + compensationValue;
+        totalPriceTextView.setText("总价: " + finalTotalPrice);
     }
 }

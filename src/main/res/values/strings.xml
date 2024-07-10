@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">item_price</string>
     <string name="about">关于</string>
-    <string name="about.text"><p>欢迎大家是有这个软件目前1.0版本</p><p>功能正在完善，请大家耐心等待</p>如何找到我www.cloverassociation.com</string>
+    <string name="about.text">\n欢迎大家使用这个软件\n目前1.0版本Beta版\n功能基本完善，更多内容正在开发\n请大家耐心等待\n开发者：四叶\n如何找到我:\nwww.cloverassociation.com\nhttps://github.com/ClOVER-QwQ</string>
     <string name="add">添加</string>
     <string name="add.item">添加物品</string>
     <string name="additem">添加物品</string>

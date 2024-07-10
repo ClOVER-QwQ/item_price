@@ -85,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
     private void loadGroupsFromFile() {
         File groupsFile = new File(getExternalFilesDir(null), "groups.txt");
         if (groupsFile.exists()) {
+            groups.clear();  // 先清空原有数据
+            groupMap.clear();  // 同时清空映射
             try (BufferedReader reader = new BufferedReader(new FileReader(groupsFile))) {
                 String line;
                 while ((line = reader.readLine())!= null) {
@@ -101,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("MainActivity", "读取 groups 文件时发生错误", e);
             }
         }
+        adapter.notifyDataSetChanged();  // 在这里通知适配器数据已更改
     }
 
     @Override

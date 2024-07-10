@@ -12,10 +12,12 @@
             android:padding="16dp"
             android:layout_marginTop="16dp" />
 
-    <TextView
-            android:id="@+id/compensation_points_text_view"
+    <EditText
+            android:id="@+id/compensation_value_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:hint="输入补偿价值"
             android:textSize="16sp"
             android:textColor="#000000"
             android:padding="16dp"
@@ -26,7 +28,7 @@
             android:id="@+id/item_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/compensation_points_text_view"
+            android:layout_below="@id/compensation_value_edit_text"
             android:layout_marginTop="16dp">
 
         <LinearLayout

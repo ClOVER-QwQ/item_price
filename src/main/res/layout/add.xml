@@ -24,8 +24,6 @@
             app:layout_constraintBottom_toTopOf="@+id/bottomButtons"
             app:layout_constraintTop_toBottomOf="@+id/groupNameInput"
             >
-
-        <!-- 动态添加的物品组将放置于此 -->
     </LinearLayout>
 
     <LinearLayout

@@ -37,7 +37,6 @@ public class AddFrame extends Activity {
 
         mainLayout = findViewById(id.mainLayout);
         itemsList = new ArrayList<>();
-        counter = 1;
         groupNameInput = findViewById(id.groupNameInput);
 
         Button addButton = findViewById(id.additembtn);
@@ -90,11 +89,15 @@ public class AddFrame extends Activity {
             return;
         }
 
-        View itemView = getLayoutInflater().inflate(layout.item, mainLayout, false);
+        View itemView = getLayoutInflater().inflate(R.layout.item, mainLayout, false);
 
-        LinearLayout itemLayout = itemView.findViewById(id.item);
-        EditText itemNameEditText = (EditText) itemLayout.findViewById(R.id.itemName);
-        EditText itemPriceEditText = (EditText) itemLayout.findViewById(R.id.itemPrice);
+        LinearLayout itemLayout = itemView.findViewById(R.id.item);
+        EditText itemNameEditText = itemLayout.findViewById(id.itemName);
+        EditText itemPriceEditText = itemLayout.findViewById(id.itemPrice);
+        Button removeButton = itemLayout.findViewById(R.id.removeItemButton);
+        removeButton.setOnClickListener(v -> {
+            removeItem(itemView);  // 调用新的方法来处理移除逻辑
+        });
 
         itemNameEditText.setId(counter * 2 - 1);
         itemPriceEditText.setId(counter * 2);
@@ -107,7 +110,18 @@ public class AddFrame extends Activity {
         itemsList.add(newItem);
         counter++;
     }
+    private void removeItem(View itemView) {
+        int index = mainLayout.indexOfChild(itemView);
+        if (index!= -1) {
+            Log.d("RemoveItem", "Removing item at index: " + index);
+            mainLayout.removeView(itemView);
 
+            itemsList.remove(index);
+            Log.d("RemoveItem", "Removed item. New size of itemsList: " + itemsList.size());
+
+            counter--;
+        }
+    }
     private void saveItemGroup() {
         if (!itemsList.isEmpty()) {
             int fileId = getNextFileId();
@@ -128,9 +142,13 @@ public class AddFrame extends Activity {
             if (currentWriter == null) {
                 currentWriter = new BufferedWriter(new FileWriter(file));
             }
+
+            Log.d("SaveItemsToFile", "Starting to save items. Items count: " + itemsList.size());
+
             for (Item item : itemsList) {
-                EditText itemNameEditText = (EditText) mainLayout.findViewById(item.getId() * 2 - 1);
-                EditText itemPriceEditText = (EditText) mainLayout.findViewById(item.getId() * 2);
+                Log.d("SaveItemsToFile", "Saving item with ID: " + item.getId() + ", Name: " + item.getName() + ", Price: " + item.getPrice());
+                EditText itemNameEditText = mainLayout.findViewById(item.getId() * 2 - 1);
+                EditText itemPriceEditText = mainLayout.findViewById(item.getId() * 2);
 
                 String itemName = itemNameEditText.getText().toString().trim();
                 String itemPrice = itemPriceEditText.getText().toString().trim();
@@ -140,13 +158,15 @@ public class AddFrame extends Activity {
 
                 currentWriter.write(item.getId() + "," + item.getName() + "," + item.getPrice() + "\n");
             }
+
+            Log.d("SaveItemsToFile", "Finished saving items.");
+
             currentWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
             Log.e("SaveItemsToFile", "Failed to save items to file.", e);
         }
     }
-
     private void saveGroupIdAndName(int fileId) {
         try {
             File groupsFile = new File(getExternalFilesDir(null), "groups.txt");

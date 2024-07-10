@@ -8,7 +8,7 @@
 
     <TextView
             android:layout_width="match_parent"
-            android:layout_height="113dp"
+            android:layout_height="283dp"
             android:text="@string/about.text"
             android:textSize="20sp"
             ></TextView>

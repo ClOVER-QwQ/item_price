@@ -9,9 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -40,22 +38,17 @@ public class GroupListAdapter extends ArrayAdapter<Group> {
 
         Group group = groups.get(position);
 
-        TextView groupIdTextView = view.findViewById(R.id.group_id_text);
         TextView groupNameTextView = view.findViewById(R.id.group_name_text);
         Button modifyButton = view.findViewById(R.id.edit_button);
         Button deleteButton = view.findViewById(R.id.delete_button);
         Button calculateButton = view.findViewById(R.id.calculate_button);
 
-        groupIdTextView.setText("Group ID: " + group.getId());
-        groupNameTextView.setText("Group Name: " + group.getName());
+        groupNameTextView.setText(group.getName());
 
         modifyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
-                // 处理修改逻辑
-                Intent modifyIntent = new Intent(context, ModifyFrame.class);
-                modifyIntent.putExtra("groupId", group.getId());
-                context.startActivity(modifyIntent);
+                Intent doing = new Intent(context, DoingFrame.class);
+                context.startActivity(doing);
             }
         });
 
@@ -77,6 +70,7 @@ public class GroupListAdapter extends ArrayAdapter<Group> {
                 // 处理计算逻辑
                 Intent add = new Intent(context, CalculateFrame.class);
                 add.putExtra("groupId", group.getId());  // 这里传入 groupId
+                add.putExtra("groupName", group.getName());  // 新增：传入物品组名称
                 context.startActivity(add);
             }
         });
