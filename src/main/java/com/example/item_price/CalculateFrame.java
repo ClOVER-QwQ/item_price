@@ -104,8 +104,13 @@ public class CalculateFrame extends AppCompatActivity {
             priceTextView.setText(item.getPrice());
             Log.d("CalculateFrame", "Set price: " + item.getPrice());  // 新增：打印设置的物品价格
 
-            quantityEditText.setText(String.valueOf(item.getNum()));  // 设置初始数量值
-            Log.d("CalculateFrame", "Set quantity: " + item.getNum());  // 新增：打印设置的物品数量
+            String numText = quantityEditText.getText().toString();
+            int quantity = 0;
+            if (!numText.isEmpty()) {
+                    quantity = Integer.parseInt(numText);
+            }
+            quantityEditText.setText(String.valueOf(quantity));  // 设置初始数量值，包括处理为空的情况
+            Log.d("CalculateFrame", "Set quantity: " + quantity);  // 新增：打印设置的物品数量
 
             if (itemLayout!= null) {
                 itemLayout.addView(itemView);
@@ -129,14 +134,8 @@ public class CalculateFrame extends AppCompatActivity {
                 if (item.getName().equals(nameTextView.getText().toString())) {  // 找到对应的物品行
                     String numText = quantityEditText.getText().toString();
                     int quantity = 0;  // 设置默认值
-                    try {
-                        quantity = Integer.parseInt(numText);
-                        if (quantity <= 0) {
-                            Toast.makeText(this, "数量必须为正整数", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                    } catch (NumberFormatException e) {
-                        Toast.makeText(this, "输入的数量格式不正确，已使用默认值 0", Toast.LENGTH_SHORT).show();
+                    if (!numText.isEmpty()) {
+                            quantity = Integer.parseInt(numText);
                     }
 
                     double itemPrice = Double.parseDouble(priceTextView.getText().toString());
@@ -148,10 +147,8 @@ public class CalculateFrame extends AppCompatActivity {
         // 获取补偿价值
         String compensationValueText = compensationValueEditText.getText().toString();
         double compensationValue = 0;
-        try {
-            compensationValue = Double.parseDouble(compensationValueText);
-        } catch (NumberFormatException e) {
-            Toast.makeText(this, "补偿价值输入格式不正确，已使用默认值 0", Toast.LENGTH_SHORT).show();
+        if (!compensationValueText.isEmpty()) {
+                compensationValue = Double.parseDouble(compensationValueText);
         }
 
         // 计算最终总价

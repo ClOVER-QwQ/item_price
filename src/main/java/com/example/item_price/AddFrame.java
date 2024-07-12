@@ -110,6 +110,7 @@ public class AddFrame extends Activity {
         itemsList.add(newItem);
         counter++;
     }
+
     private void removeItem(View itemView) {
         int index = mainLayout.indexOfChild(itemView);
         if (index!= -1) {
@@ -122,6 +123,7 @@ public class AddFrame extends Activity {
             counter--;
         }
     }
+
     private void saveItemGroup() {
         if (!itemsList.isEmpty()) {
             int fileId = getNextFileId();
@@ -153,8 +155,17 @@ public class AddFrame extends Activity {
                 String itemName = itemNameEditText.getText().toString().trim();
                 String itemPrice = itemPriceEditText.getText().toString().trim();
 
-                item.setName(itemName);
-                item.setPrice(itemPrice);
+                if (itemName.isEmpty()) {
+                    item.setName("未命名");
+                } else {
+                    item.setName(itemName);
+                }
+
+                if (itemPrice.isEmpty()) {
+                    item.setPrice("0");
+                } else {
+                    item.setPrice(itemPrice);
+                }
 
                 currentWriter.write(item.getId() + "," + item.getName() + "," + item.getPrice() + "\n");
             }
@@ -167,6 +178,7 @@ public class AddFrame extends Activity {
             Log.e("SaveItemsToFile", "Failed to save items to file.", e);
         }
     }
+
     private void saveGroupIdAndName(int fileId) {
         try {
             File groupsFile = new File(getExternalFilesDir(null), "groups.txt");

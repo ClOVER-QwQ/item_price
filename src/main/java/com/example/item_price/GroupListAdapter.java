@@ -23,7 +23,6 @@ public class GroupListAdapter extends ArrayAdapter<Group> {
     private List<Group> groups;
     private Context context;
     private MainActivity mainActivity;  // 新增，保存 MainActivity 的引用
-
     public GroupListAdapter(Context context, List<Group> groups, MainActivity mainActivity) {  // 修改构造函数，接收 MainActivity 的引用
         super(context, 0, groups);
         this.groups = groups;
@@ -35,9 +34,7 @@ public class GroupListAdapter extends ArrayAdapter<Group> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = LayoutInflater.from(context).inflate(R.layout.group_item_layout, parent, false);
-
         Group group = groups.get(position);
-
         TextView groupNameTextView = view.findViewById(R.id.group_name_text);
         Button modifyButton = view.findViewById(R.id.edit_button);
         Button deleteButton = view.findViewById(R.id.delete_button);
@@ -47,11 +44,12 @@ public class GroupListAdapter extends ArrayAdapter<Group> {
 
         modifyButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent doing = new Intent(context, DoingFrame.class);
+                Intent doing = new Intent(context, ModifyFrame.class);
+                doing.putExtra("groupName", group.getName());
+                doing.putExtra("groupId", group.getId());
                 context.startActivity(doing);
             }
         });
-
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
