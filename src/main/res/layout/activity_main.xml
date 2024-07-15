@@ -23,6 +23,22 @@
             android:text="@string/add"
             android:layout_marginLeft="10dp"
             />
+
+        <Button
+                android:id="@+id/export"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="导出"
+                android:layout_marginLeft="10dp"
+                />
+
+        <Button
+                android:id="@+id/introduce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="导入"
+                android:layout_marginLeft="10dp"
+                />
     </LinearLayout>
     <ListView
             android:id="@+id/listView"

@@ -1,4 +1,4 @@
-package com.example.item_price;
+package com.clover.item_price;
 
 import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -20,6 +20,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.example.item_price", appContext.getPackageName());
+        assertEquals("com.clover.item_price", appContext.getPackageName());
     }
 }

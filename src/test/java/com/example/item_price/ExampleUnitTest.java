@@ -1,4 +1,4 @@
-package com.example.item_price;
+package com.clover.item_price;
 
 import org.junit.Test;
 

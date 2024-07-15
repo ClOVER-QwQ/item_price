@@ -4,8 +4,8 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <TextView
-            android:id="@+id/modify_group_name_text_view"
+    <EditText
+            android:id="@+id/group_name_edit_text"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:text="物品组名称"
