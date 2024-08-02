@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <EditText
+            android:id="@+id/group_name_edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="物品组名称"
+            android:textSize="32dp"
+            />
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="614dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                    android:id="@+id/modify_item_info_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+    </ScrollView>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="bottom"
+            android:orientation="horizontal"
+            >
+
+        <Button
+                android:id="@+id/add_item_button"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:text="添加"
+                />
+
+        <Button
+                android:id="@+id/save_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="保存"
+                />
+
+        <Button
+                android:id="@+id/back_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="返回"
+                />
+
+    </LinearLayout>
+
+</LinearLayout>

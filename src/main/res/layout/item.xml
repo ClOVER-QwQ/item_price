@@ -1,0 +1,33 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+              android:id="@+id/item"
+              android:padding="8dp">
+
+    <!-- 物品名称输入框 -->
+    <EditText
+            android:id="@+id/itemName"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="物品名称"
+            android:inputType="text"/>
+
+    <!-- 物品价格输入框 -->
+    <EditText
+            android:id="@+id/itemPrice"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="物品价格"
+            android:inputType="numberDecimal"/>
+
+    <!-- 移除物品按钮 -->
+    <Button
+            android:id="@+id/removeItemButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="移除"/>
+
+</LinearLayout>
