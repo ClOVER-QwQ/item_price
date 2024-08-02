@@ -20,3 +20,4 @@ This is a beta version, and it's not completely functional, but it can be used w
 本产品已经停止更新，请关注item_price_plus
 
 # item_price_plus
+item_price_plus https://github.com/ClOVER-QwQ/item_price_plus 有相关建议请前往。
