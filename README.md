@@ -20,4 +20,5 @@ This is a beta version, and it's not completely functional, but it can be used w
 本产品已经停止更新，请关注item_price_plus
 
 # item_price_plus
+item_price的改进工程用kotlin进行了重写，将文件记录改成数据库记录，采用Spring框架增加了扫码记录功能
 item_price_plus https://github.com/ClOVER-QwQ/item_price_plus 有相关建议请前往。
